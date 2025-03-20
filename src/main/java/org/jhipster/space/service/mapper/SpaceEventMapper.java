@@ -18,5 +18,6 @@ public interface SpaceEventMapper extends EntityMapper<SpaceEventDTO, SpaceEvent
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "description", source = "description")
     MissionDTO toDtoMissionName(Mission mission);
 }
