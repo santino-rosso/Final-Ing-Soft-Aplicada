@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (spaceEvent(); as spaceEventRef) {
+      <div>
+        <h2 data-cy="spaceEventDetailsHeading"><span jhiTranslate="spaceApp.spaceEvent.detail.title">Space Event</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ spaceEventRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="spaceApp.spaceEvent.name">Name</span></dt>
+          <dd>
+            <span>{{ spaceEventRef.name }}</span>
+          </dd>
+          <dt><span jhiTranslate="spaceApp.spaceEvent.date">Date</span></dt>
+          <dd>
+            <span>{{ spaceEventRef.date | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="spaceApp.spaceEvent.description">Description</span></dt>
+          <dd>
+            <span>{{ spaceEventRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="spaceApp.spaceEvent.photo">Photo</span></dt>
+          <dd>
+            @if (spaceEventRef.photo) {
+              <div>
+                <a (click)="openFile(spaceEventRef.photo, spaceEventRef.photoContentType)">
+                  <img
+                    [src]="'data:' + spaceEventRef.photoContentType + ';base64,' + spaceEventRef.photo"
+                    style="max-width: 100%"
+                    alt="spaceEvent"
+                  />
+                </a>
+                {{ spaceEventRef.photoContentType }}, {{ byteSize(spaceEventRef.photo) }}
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="spaceApp.spaceEvent.type">Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'spaceApp.SpaceEventType.' + (spaceEventRef.type ?? 'null')">{{
+              { null: '', LAUNCH: 'LAUNCH', LANDING: 'LANDING' }[spaceEventRef.type ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="spaceApp.spaceEvent.mission">Mission</span></dt>
+          <dd>
+            @if (spaceEvent()!.mission) {
+              <div>
+                <a [routerLink]="['/mission', spaceEvent()!.mission?.id, 'view']">{{ spaceEventRef.mission?.name }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/space-event', spaceEventRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

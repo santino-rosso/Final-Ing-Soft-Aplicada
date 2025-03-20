@@ -1,0 +1,21 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "space",
+    "buildTool": "maven",
+    "cacheProvider": "no",
+    "clientFramework": "angular",
+    "devDatabaseType": "mysql",
+    "enableSwaggerCodegen": true,
+    "entities": ["SpaceEvent", "Mission"],
+    "jhipsterVersion": "8.9.0",
+    "jwtSecretKey": "MmQ4NTRiZDIxNmY0MGNjNWY5MThjMzZiODliYmYwZWYzYzEyMDQ4NTU0ZDg3MTBiMzgzMzg5MTA2MWRhZDYwZjVlNzEyOTUzYzEwODRlNDdmZDMwNDAyN2NjZjcxNmI2MWFjYjAxZTE3MGI2YjBjNGY3OGQ4OTMwYjM5OWMyNDg=",
+    "languages": ["en", "es"],
+    "lastLiquibaseTimestamp": 1742483947000,
+    "nativeLanguage": "en",
+    "packageName": "org.jhipster.space",
+    "prodDatabaseType": "mysql",
+    "testFrameworks": ["cypress"]
+  }
+}

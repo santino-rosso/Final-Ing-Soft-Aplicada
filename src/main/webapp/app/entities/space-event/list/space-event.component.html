@@ -1,0 +1,142 @@
+<div>
+  <h2 id="page-heading" data-cy="SpaceEventHeading">
+    <span jhiTranslate="spaceApp.spaceEvent.home.title">Space Events</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="spaceApp.spaceEvent.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-space-event"
+        [routerLink]="['/space-event/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="spaceApp.spaceEvent.home.createLabel">Create a new Space Event</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (spaceEvents().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="spaceApp.spaceEvent.home.notFound">No Space Events found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span jhiTranslate="spaceApp.spaceEvent.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="date">
+              <div class="d-flex">
+                <span jhiTranslate="spaceApp.spaceEvent.date">Date</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span jhiTranslate="spaceApp.spaceEvent.description">Description</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="photo">
+              <div class="d-flex">
+                <span jhiTranslate="spaceApp.spaceEvent.photo">Photo</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="type">
+              <div class="d-flex">
+                <span jhiTranslate="spaceApp.spaceEvent.type">Type</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="mission.name">
+              <div class="d-flex">
+                <span jhiTranslate="spaceApp.spaceEvent.mission">Mission</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0">
+          @for (spaceEvent of spaceEvents(); track trackId(spaceEvent)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/space-event', spaceEvent.id, 'view']">{{ spaceEvent.id }}</a>
+              </td>
+              <td>{{ spaceEvent.name }}</td>
+              <td>{{ spaceEvent.date | formatMediumDate }}</td>
+              <td>{{ spaceEvent.description }}</td>
+              <td>
+                @if (spaceEvent.photo) {
+                  <a (click)="openFile(spaceEvent.photo, spaceEvent.photoContentType)">
+                    <img
+                      [src]="'data:' + spaceEvent.photoContentType + ';base64,' + spaceEvent.photo"
+                      style="max-height: 30px"
+                      alt="spaceEvent"
+                    />
+                  </a>
+                  <span>{{ spaceEvent.photoContentType }}, {{ byteSize(spaceEvent.photo) }}</span>
+                }
+              </td>
+              <td [jhiTranslate]="'spaceApp.SpaceEventType.' + (spaceEvent.type ?? 'null')">
+                {{ { null: '', LAUNCH: 'LAUNCH', LANDING: 'LANDING' }[spaceEvent.type ?? 'null'] }}
+              </td>
+              <td>
+                @if (spaceEvent.mission) {
+                  <div>
+                    <a [routerLink]="['/mission', spaceEvent.mission.id, 'view']">{{ spaceEvent.mission.name }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/space-event', spaceEvent.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/space-event', spaceEvent.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(spaceEvent)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,46 @@
+application { 
+  config {
+    baseName space
+    applicationType monolith
+    authenticationType jwt
+    packageName org.jhipster.space
+    cacheProvider no
+    buildTool maven
+    devDatabaseType mysql
+    prodDatabaseType mysql
+    clientFramework angular
+    testFrameworks [cypress]
+	  nativeLanguage en
+    languages [en, es]
+    enableSwaggerCodegen true
+  }
+  entities *
+}
+
+entity SpaceEvent {
+  name String required
+  date LocalDate required
+  description TextBlob required
+  photo ImageBlob required
+  type SpaceEventType required
+}
+
+entity Mission {
+  name String required
+  description String
+}
+
+enum SpaceEventType {
+  LAUNCH,
+  LANDING
+}
+
+relationship OneToOne {
+  SpaceEvent{mission(name)} to Mission
+}
+
+paginate SpaceEvent with infinite-scroll
+paginate Mission with pagination
+
+service all with serviceImpl
+dto * with mapstruct
