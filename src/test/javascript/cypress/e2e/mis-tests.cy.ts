@@ -91,9 +91,12 @@ describe('Probando funcionalidades', () => {
     cy.clickOnEntityMenuItem('space-event');
     cy.get('[data-cy="entityEditButton"]').last().click();
 
-    cy.get(`[data-cy="name"]`).clear().type(exampleEditSpaceEvent.name);
-    cy.get(`[data-cy="date"]`).clear().type(exampleEditSpaceEvent.date);
-    cy.get(`[data-cy="description"]`).clear().type(exampleEditSpaceEvent.description);
+    cy.get(`[data-cy="name"]`).clear();
+    cy.get(`[data-cy="name"]`).type(exampleEditSpaceEvent.name);
+    cy.get(`[data-cy="date"]`).clear();
+    cy.get(`[data-cy="date"]`).type(exampleEditSpaceEvent.date);
+    cy.get(`[data-cy="description"]`).clear();
+    cy.get(`[data-cy="description"]`).type(exampleEditSpaceEvent.description);
     cy.get(entityCreateSaveButtonSelector).click();
 
     cy.wait('@putEntitySpaceEventRequest').then(({ response }) => {
